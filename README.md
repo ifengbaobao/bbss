@@ -1,4 +1,5 @@
 # BBSS 是 宝宝Screen Shared 的简写。
+一款windows下的屏幕共享软件。  
 本程序使用qt开发。  
 BBSS文件夹内部是源码。  
 包括客户端源码和服务器端源码。  
