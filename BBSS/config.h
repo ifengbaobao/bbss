@@ -2,7 +2,7 @@
 #define CONFIG
 
 //默认端口。
-#define PORT 37473
+#define PORT 37474
 
 #endif // CONFIG
 
