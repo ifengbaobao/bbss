@@ -9,6 +9,7 @@
 #include<QDebug>
 #include<QNetworkInterface>
 #include <QMetaType>
+#include<QDebug>
 
 SocketSend::SocketSend() : QObject(0)
 {
@@ -31,7 +32,6 @@ SocketSend::SocketSend() : QObject(0)
 
     connect(this,&SocketSend::portAndHostAddress,this,&SocketSend::slotPortAndHostAddress);
 
-    //qDebug() << "SocketSend buffer:" << sock->socketOption(QUdpSocket::ReceiveBufferSizeSocketOption).toInt();
 }
 
 SocketSend::~SocketSend()
@@ -60,10 +60,12 @@ void SocketSend::slotSendData(QByteArray data)
         while(ret == -1 && maxCount > 0)
         {
             ret = sock->writeDatagram(packet,  address, this->port);
+            qDebug()<<"数据失败重试："<<maxCount;
             --maxCount;
         }
         if(ret == -1)
         {
+            qDebug()<<"数据最终失败！";
             break;
         }
         static int sockCount = 0;
@@ -100,9 +102,9 @@ void SocketSend::slotPortAndHostAddress(quint16 port,QHostAddress address)
 
 void SocketSend::setBlockSize(int blockSize)
 {
-    if(blockSize > sock->socketOption(QUdpSocket::ReceiveBufferSizeSocketOption).toInt())
+    if(blockSize > sock->socketOption(QUdpSocket::SendBufferSizeSocketOption).toInt())
     {
-        blockSize = sock->socketOption(QUdpSocket::ReceiveBufferSizeSocketOption).toInt();
+        blockSize = sock->socketOption(QUdpSocket::SendBufferSizeSocketOption).toInt();
     }
     this->blockSize =blockSize;
 }

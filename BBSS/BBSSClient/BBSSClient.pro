@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     ../myqbitmapserialize.cpp \
     ../socketrecv.cpp \
     ../socketsend.cpp \
-    showwidget.cpp
+    showwidget.cpp \
+    ../debugutils.cpp
 
 HEADERS  += \
     ../jconfig.h \
@@ -40,7 +41,8 @@ HEADERS  += \
     ../socketrecv.h \
     ../socketsend.h \
     showwidget.h \
-    ../config.h
+    ../config.h \
+    ../debugutils.h
 
 #jpeg lib
 win32: LIBS += -L$$PWD/../ -ljpeg

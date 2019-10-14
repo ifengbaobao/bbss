@@ -11,7 +11,6 @@ SocketRecv::SocketRecv() : QObject(0)
     sock = new QUdpSocket(this);
     connect(sock,&QUdpSocket::readyRead, this, &SocketRecv::slotReadyRead);
 
-
     //关于线程的：
     thread = new QThread;
     connect(thread, &QThread::finished, sock, &QUdpSocket::deleteLater);
@@ -21,6 +20,8 @@ SocketRecv::SocketRecv() : QObject(0)
 
     connect(this,&SocketRecv::bindPort,this,&SocketRecv::slotBindPort);
     connect(this,&SocketRecv::unbindPort,this,&SocketRecv::slotUnbindPort);
+
+    sock->setSocketOption(QUdpSocket::ReceiveBufferSizeSocketOption,1024*1024*50);
 }
 
 SocketRecv::~SocketRecv()
@@ -32,7 +33,6 @@ SocketRecv::~SocketRecv()
 void SocketRecv::slotBindPort(quint16 port,QHostAddress address)
 {
     sock->bind(address, port);
-    //        this->slotReadyRead();
 }
 
 void SocketRecv::slotUnbindPort()
@@ -42,8 +42,6 @@ void SocketRecv::slotUnbindPort()
 
 void SocketRecv::slotReadyRead()
 {
-
-
     while(sock->hasPendingDatagrams())
     {
         qint64 len = sock->pendingDatagramSize();
@@ -75,14 +73,16 @@ void SocketRecv::combine(quint32 frameIdx)
         //如果数据不完整，直接退出。
         if(framePackets.find(idx) == framePackets.end())
         {
+            qDebug()<<"数据不完整，直接退出！";
             packets.remove(frameIdx);
             return;
         }
         buf += framePackets[idx];
     }
     packets.remove(frameIdx);
-    if(packets.size()>20)
+    if(packets.size()>200)
     {
+        qDebug()<<"数据包有200个垃圾了清空！";
         packets.clear();
     }
     emit recvData(buf);

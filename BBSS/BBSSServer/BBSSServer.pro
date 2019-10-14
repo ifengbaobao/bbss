@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     screencontrol.cpp \
     bitmapcontrol.cpp \
     servercontrol.cpp \
-    serversetwidget.cpp
+    serversetwidget.cpp \
+    ../debugutils.cpp
 
 HEADERS  += \
     ../jconfig.h \
@@ -45,7 +46,8 @@ HEADERS  += \
     bitmapcontrol.h \
     servercontrol.h \
     serversetwidget.h \
-    ../config.h
+    ../config.h \
+    ../debugutils.h
 
 #jpeg lib
 win32: LIBS += -L$$PWD/../ -ljpeg
